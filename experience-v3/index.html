@@ -86,12 +86,19 @@
     const s=minutes(r.onset,r.offsets?.onset),last=r.interruptions.at(-1),terminal=last?.outcome==='no_resleep'?minutes(last.wake,last.wakeDay):null;
     const end=minutes(r.final,r.offsets?.final)??terminal;
     const continuous=r.state==='continuous';
-    const known=continuous||(r.state==='interrupted'&&r.complete&&r.interruptions.length>0&&r.interruptions.every(w=>w.wake&&(w.outcome==='no_resleep'||(w.outcome==='reslept'&&w.resleep))));
-    if(s==null||end==null||!known||end<s||end-s>1440||validate('2026-01-01',r))return {total:null,awake:null,segments:[],reason:'信息不足，暂不估算时长'};
+    const known=continuous||(r.state==='interrupted'&&r.interruptions.length>0&&r.interruptions.every(w=>w.wake&&(w.outcome==='no_resleep'||(w.outcome==='reslept'&&w.resleep))));
+    const problem=validate('2026-01-01',r);
+    const missing=[];
+    if(s==null)missing.push('估计入睡时间');
+    if(end==null)missing.push('最后醒来时间');
+    if(!known)missing.push(r.state==='interrupted'?'每次醒来与再次入睡的时间 / 结果':'是否记得明显中断');
+    if(problem||missing.length||end<s||end-s>1440)return {total:null,awake:null,segments:[],reason:problem||('还需补充：'+missing.join('、'))};
     let start=s,awake=0;const segments=[];
     if(!continuous)for(const w of r.interruptions){const a=minutes(w.wake,w.wakeDay),b=minutes(w.resleep,w.resleepDay);segments.push([start,a]);if(w.outcome==='reslept'){awake+=b-a;start=b;}else start=end;}
     if(start<end)segments.push([start,end]);
-    return {total:segments.reduce((n,[a,b])=>n+b-a,0),awake,segments,reason:'根据自述估计'};
+    const recordedTotal=segments.reduce((n,[a,b])=>n+b-a,0),out=minutes(r.out,r.offsets?.out),afterFinal=out!=null?out-end:null;
+    const pendingComplete=!continuous&&!r.complete;
+    return {total:pendingComplete?null:recordedTotal,recordedTotal,awake,pendingComplete,afterFinal,segments:pendingComplete?[]:segments,reason:pendingComplete?'按已填写时段估算；中断是否已记全，仍待你确认。':'根据自述估计'};
   }
   function same(a,b) {const fields=['prepare','onset','final','out','offsets','state','interruptions','complete','feeling','dayFeeling','note'];return fields.every(f=>JSON.stringify(a[f])===JSON.stringify(b[f]));}
   function merge(state,map,source,rawText) {
@@ -191,13 +198,15 @@ function events(r){let list=[];for(const [f,label]of [['prepare','准备睡觉']
   for(const [i,w] of r.interruptions.entries()){
     if(w.wake)list.push({at:S.minutes(w.wake,w.wakeDay),time:timeLabel(w.wake,w.wakeDay),label:`第 ${i+1} 次醒来 · ${({reslept:'后来再睡',no_resleep:'未再入睡',unknown:'后续待补充'})[w.outcome]||'后续待补充'}`});
     if(w.outcome==='reslept'&&w.resleep)list.push({at:S.minutes(w.resleep,w.resleepDay),time:timeLabel(w.resleep,w.resleepDay),label:'估计再次入睡'});
-  }return list.sort((a,b)=>a.at-b.at);}
+  }const last=r.interruptions.at(-1);if(last?.outcome==='no_resleep'){const at=S.minutes(last.wake,last.wakeDay);list=list.filter(e=>!(e.label==='最后醒来'&&e.at===at));}return list.sort((a,b)=>a.at-b.at);}
 function renderNight(){const r=data.records[selected],container=$('nightContent');container.replaceChildren();$('nightDate').textContent=selected+' · 这一晚';$('nightTitle').textContent=selected===S.yesterday()?'昨晚怎么样':'这一晚的回顾';$('editSelected').textContent=r?'修改 / 补充 ↗':'补充记录 ↗';
   if(!r){const box=el('div','empty');box.append(el('span','symbol','☾'),el('div','','还没有留下这一晚'),el('p','quiet','说一句，或者只填你记得的部分。'));container.append(box);return;}
-  const m=S.metrics(r),stats=el('div','stats');for(const [title,value]of [['估计睡眠时长',duration(m.total)],['入睡后清醒',duration(m.awake)]]){const item=el('div','metric');item.append(el('strong','',value),el('span','',title));stats.append(item);}container.append(stats);
+  const m=S.metrics(r),stats=el('div','stats'),terminal=r.interruptions.at(-1)?.outcome==='no_resleep';for(const [title,value]of [[m.pendingComplete?'已记录睡眠时段（待确认）':'估计睡眠时长',duration(m.total??m.recordedTotal)],[terminal?'末次醒后至起床':(m.pendingComplete?'已记录中断清醒':'夜间中断清醒'),duration(terminal?m.afterFinal:m.awake)]]){const item=el('div','metric');item.append(el('strong','',value),el('span','',title));stats.append(item);}container.append(stats);
   const pills=el('div','pills');pills.append(el('span','pill',stateLabel(r)));if(r.feeling)pills.append(el('span','pill '+r.feeling,feels[r.feeling]));if(r.dayFeeling)pills.append(el('span','pill',dayFeels[r.dayFeeling]));container.append(pills);
   const ev=events(r);if(ev.length){const line=el('div','timeline');for(const e of ev){const row=el('div','event');row.append(el('time','',e.time),el('span','',e.label));line.append(row);}container.append(line);}
-  container.append(el('p','quiet',m.reason+'。'+(r.importedFrom?'由历史记录导入；缺少的项目未作推算。':'')));
+  container.append(el('p','quiet',m.reason+(r.importedFrom?(r.updatedAt?' · 已补充历史记录。':' · 由历史记录导入。'):'')));
+  if(m.pendingComplete){const b=el('button','text-btn','中断已记全，确认统计');b.onclick=()=>{try{const next=S.clone(data);next.records[selected].complete=true;next.records[selected].updatedAt=new Date().toISOString();commit(next);render();say('已确认并更新统计。');}catch(e){say('未能保存：'+e.message);}};container.append(b);}
+  if(terminal&&m.awake>0)container.append(el('p','quiet','此前中断清醒合计：'+duration(m.awake)));
   if(r.state==='interrupted'&&r.interruptions.some(w=>!w.wake||(w.outcome==='reslept'&&!w.resleep)))container.append(el('p','quiet','有中断时间尚未填写，时间线仅展示已知事件。'));
   if(r.note)container.append(el('p','quiet',r.note));
 }

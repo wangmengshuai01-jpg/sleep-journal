@@ -10,7 +10,7 @@
 <section class="card"><div class="eyebrow">ONE SMALL STEP</div><h2>了解之后，试一小步</h2><p class="quiet" id="observation"></p><div class="idea"><strong>给作息留一点稳定</strong><p>可以尝试相对固定的起床时间，同时给自己留出足够的睡眠机会。过一段时间，再回看你的感受和记录。</p></div><details><summary>这些观察依据什么？</summary><p>根据你填写的时间和感受整理，不提供综合评分，也不能判断深睡、浅睡或诊断失眠。准备睡觉不等于已经睡着；没填写的项目保持未知。</p><p>18–60 岁成人通常建议每日睡眠至少 7 小时，仍要结合恢复感、连续性及个人情况。持续睡眠困难影响生活，或有憋醒、明显打鼾，可考虑专业评估。慢性失眠的一线治疗包括 CBT-I，普通习惯建议不能替代治疗。</p><div class="links"><a href="https://www.cdc.gov/sleep/about/" target="_blank" rel="noopener">CDC · 睡眠依据</a><a href="https://www.nhlbi.nih.gov/health/insomnia/treatment" target="_blank" rel="noopener">NIH · 失眠治疗</a></div></details></section>
 <section class="footer"><div class="footer-actions"><button id="export">导出备份</button><button id="import">导入文件</button><button id="history">历史数据</button></div><input type="file" id="importFile" accept=".json,application/json" hidden><p>记录保存在当前设备的浏览器中，不上传到公开网站。换设备或浏览器，需要导入备份。</p><div class="links"><a href="https://wangmengshuai01-jpg.github.io/sleep-journal/">返回原版</a><a href="https://wangmengshuai01-jpg.github.io/sleep-journal/experience-v2/">返回体验 V2</a><a href="wireframe.html" target="_blank">低保真设计稿</a></div><p>新旧版分别保存，之后的修改不会互相覆盖。</p></section><div id="status" class="status" role="status" aria-live="polite"></div></main></div>
 <dialog id="editor" aria-labelledby="editorTitle"><div class="sheet"><div class="dialog-head"><h2 id="editorTitle">记录这一晚</h2><button class="close" data-close aria-label="关闭编辑">×</button></div><p class="quiet">大概记得就好。不确定的时间可以留空。</p><div class="review-note" id="reviewNote"></div><form id="recordForm"><label for="date">哪一晚（开始准备睡觉所属的夜晚）</label><input id="date" type="date" required><div id="prepareField"></div><label for="state">这一晚的情况</label><select id="state"><option value="">暂不确定 / 只记准备睡觉</option><option value="continuous">睡过，没记得明显中断</option><option value="slept">睡过，中断情况不确定</option><option value="interrupted">睡眠中断</option><option value="awake">整夜没有睡着（自述）</option></select><div id="sleepFields"><div id="onsetField"></div><div id="interruptFields" hidden><div id="interruptions"></div><button type="button" id="addWake">＋ 再加一次中断</button><label class="check"><input type="checkbox" id="complete"><span>记得的中断已填写完整（不确定就不勾选）</span></label></div><div id="finalField"></div></div><div id="outField"></div><div class="fields-grid"><div><label for="feeling">早上感觉</label><select id="feeling"><option value="">未填写</option><option value="good">精神不错</option><option value="okay">一般</option><option value="tired">比较疲惫</option></select></div><div><label for="dayFeeling">白天困倦</label><select id="dayFeeling"><option value="">未填写</option><option value="alert">清醒</option><option value="somewhat">有点困</option><option value="sleepy">明显困倦</option></select></div></div><details id="noteDetails"><summary>备注 / 口述原文</summary><label for="note">补充说明</label><textarea id="note" maxlength="4000" rows="3"></textarea><p class="quiet" id="transcript"></p></details><p class="quiet">当日是所选日期，次日是第二天；凌晨通常选“次日”。</p><p class="error" id="formError" role="alert"></p><div class="form-actions"><button type="button" data-close>取消</button><button class="dark" type="submit" id="save">确认并保存</button></div><button type="button" class="danger" id="delete">删除新版中这一晚</button></form></div></dialog>
-<dialog id="voiceDialog" aria-labelledby="voiceTitle"><div class="sheet"><div class="dialog-head"><h2 id="voiceTitle">说说昨晚</h2><button class="close" data-close aria-label="关闭语音">×</button></div><p class="quiet">支持常见说法，整理后请核对。也可使用 iPhone 键盘上的听写按钮。</p><div class="review-note">例如：昨晚十一点上床，半小时后睡着，凌晨三点醒了，凌晨四点又睡着，早上七点醒来，七点半起床，今天有点累。</div><label for="speechText">你的描述</label><textarea id="speechText" placeholder="点下方开始说话，或者用键盘听写…" maxlength="4000"></textarea><p id="voiceStatus" class="quiet" role="status"></p><div class="form-actions"><button id="listen">◉ 开始说话</button><button class="dark" id="parseVoice">整理成确认卡</button></div><p class="quiet">语音识别可能由浏览器服务处理；本站不保存录音。这里只实现网页语音，Siri 尚未直接接入。</p></div></dialog>
+<dialog id="voiceDialog" aria-labelledby="voiceTitle"><div class="sheet"><div class="dialog-head"><h2 id="voiceTitle">说说昨晚</h2><button class="close" data-close aria-label="关闭语音">×</button></div><p class="quiet">支持常见说法，整理后请核对。也可使用 iPhone 键盘上的听写按钮。</p><div class="review-note">例如：昨晚十一点上床，半小时后睡着，凌晨三点醒了，凌晨四点又睡着，早上七点醒来，七点半起床，今天有点累。</div><label for="speechText">你的描述</label><textarea id="speechText" placeholder="点下方开始说话，或者用键盘听写…" maxlength="4000"></textarea><p id="voiceStatus" class="quiet" role="status" aria-live="polite"></p><div class="notice" id="dictationGuide" hidden><strong>使用系统听写</strong><p id="dictationHelp"></p><p>文字出现后，点击“整理成确认卡”。网页不能替你开启系统听写。</p></div><button id="dictation" type="button">使用系统听写</button><div class="form-actions"><button id="listen">◉ 开始说话</button><button class="dark" id="parseVoice">整理成确认卡</button></div><p class="quiet">语音识别可能由浏览器服务处理；本站不保存录音。这里只实现网页语音，Siri 尚未直接接入。</p></div></dialog>
 <dialog id="historyDialog" aria-labelledby="historyTitle"><div class="sheet"><div class="dialog-head"><h2 id="historyTitle">历史记录与备份</h2><button class="close" data-close aria-label="关闭历史记录">×</button></div><p class="quiet">首次打开时自动复制同一浏览器里的原版与 V2 记录。原版不变，同一天有差异的两份记录都保留。若另一版有新增记录，可再次检查。</p><p id="historyStats"></p><button id="rescan">再次检查旧版记录</button><div id="conflicts"></div><details><summary>为什么没有找到手机里的记录？</summary><p>请用曾经记录的同一个浏览器打开此链接。微信内置浏览器、Safari、主屏幕入口可能各有独立数据。仍找不到时，在旧版导出备份，再到这里导入。已被浏览器清除且没有备份的数据，网站无法恢复。</p></details><p class="quiet">导出文件包含当前记录、导入原始快照和待核对版本，请保管好。导入文件时保留现有记录，同日差异进入核对列表。</p></div></dialog>
 <script>
 (function (root) {
@@ -164,9 +164,45 @@
 
 </script>
 <script>
+(function(root){
+  'use strict';
+  const reasons={
+    'not-allowed':'麦克风权限被拒绝或当前页面不允许访问，请检查浏览器与系统的麦克风权限。',
+    'service-not-allowed':'浏览器没有允许所需的语音识别服务。允许麦克风也可能出现此问题。',
+    'network':'语音识别服务连接失败。可以改用系统听写。',
+    'audio-capture':'没有获取到麦克风音频，请检查输入设备和系统权限。',
+    'no-speech':'这次没有识别到讲话，请靠近麦克风重试，或改用系统听写。',
+    'language-not-supported':'当前语音服务不支持中文，请改用系统听写。',
+    'aborted':'语音识别被中断，已识别文字会保留。'
+  };
+  function create({Recognition,onStatus,onText,onActive,getText,timer=setTimeout,clear=clearTimeout}){
+    let current=null;
+    function start(){
+      if(current)return;
+      if(!Recognition){onStatus('当前浏览器没有提供网页语音识别，请改用系统听写。');return;}
+      let rec;try{rec=new Recognition();}catch{onStatus('无法创建语音识别服务，请改用系统听写。');return;}
+      const s={rec,base:getText(),final:'',partial:'',error:false,stopped:false,closed:false,watch:null};current=s;
+      const finish=message=>{if(s.closed)return;s.closed=true;clear(s.watch);if(current===s)current=null;onActive(false);if(message)onStatus(message);};
+      const flush=()=>{const text=[s.base,s.final,s.partial].filter(Boolean).join('，');if(text)onText(text);};
+      rec.lang='zh-CN';rec.interimResults=true;rec.continuous=true;
+      rec.onstart=()=>{if(s.closed)return;clear(s.watch);onStatus('正在听，请说话。讲完后点击“停止说话”。');};
+      rec.onresult=e=>{if(s.closed)return;const final=[],partial=[];for(let i=0;i<e.results.length;i++){const item=e.results[i],text=item[0]?.transcript||'';(item.isFinal?final:partial).push(text);}s.final=final.join('，');s.partial=partial.join('，');flush();};
+      rec.onerror=e=>{if(s.closed)return;s.error=true;flush();finish((reasons[e.error]||'语音识别发生错误，请改用系统听写。')+'（'+(e.error||'unknown')+'）');try{rec.abort();}catch{}};
+      rec.onend=()=>{if(s.closed)return;flush();const hasText=!!(s.final||s.partial).trim();finish(hasText?'已保留识别文字，请核对后整理成确认卡。':s.stopped?'已停止，本次未识别到文字。可重试或改用系统听写。':'语音服务刚启动就结束，未返回文字。麦克风许可不代表识别服务可用，请改用系统听写。');};
+      onActive(true);onStatus('正在启动语音服务…');
+      s.watch=timer(()=>{if(s.closed)return;finish('语音服务启动超时，请改用系统听写。');try{rec.abort();}catch{}},10000);
+      try{rec.start();}catch(e){finish('无法启动语音服务（'+(e.name||'未知错误')+'），请改用系统听写。');}
+    }
+    function stop(){if(!current)return;current.stopped=true;try{current.rec.stop();}catch{current.rec.onend();}}
+    function cancel(){if(!current)return;const s=current;s.stopped=true;try{s.rec.abort();}catch{}if(!s.closed)s.rec.onend();}
+    return {start,stop,cancel,get active(){return current!==null;}};
+  }
+  root.VoiceCapture={create};
+})(globalThis);
+
 'use strict';
 const S=Sleep,$=id=>document.getElementById(id),el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x;};
-let data=S.empty(),locked=false,selected=S.yesterday(),month=new Date(selected+'T12:00:00'),editKey=null,draft=null,wakes=[],recognizer=null,storageIssues=[],migrationMessage='';month.setDate(1);
+let data=S.empty(),locked=false,selected=S.yesterday(),month=new Date(selected+'T12:00:00'),editKey=null,draft=null,wakes=[],storageIssues=[],migrationMessage='';month.setDate(1);
 const feels={good:'精神不错',okay:'一般',tired:'比较疲惫'},dayFeels={alert:'白天清醒',somewhat:'白天有点困',sleepy:'白天明显困倦'};
 const duration=n=>n==null?'待补充':n===0?'0 分钟':`${Math.floor(n/60)?Math.floor(n/60)+' 小时 ':''}${n%60?n%60+' 分':''}`.trim();
 const timeLabel=(t,d)=>t?(['当日','次日','后日'][d??S.dayFor(t)]+' '+t):'未填写';
@@ -244,9 +280,12 @@ $('manual').onclick=()=>openEditor(S.yesterday());$('editSelected').onclick=()=>
 $('quick').onclick=()=>{const d=new Date(),k=S.night(d);if(data.records[k]){openEditor(k);$('reviewNote').textContent='这一晚已有记录，已打开供你修改，不会直接替换。';return;}const r=S.newRecord();r.prepare=`${S.pad(d.getHours())}:${S.pad(d.getMinutes())}`;r.offsets.prepare=S.dayFor(r.prepare);r.updatedAt=d.toISOString();try{const next=S.clone(data);next.records[k]=r;next.deleted=next.deleted.filter(x=>x!==k);commit(next);selected=k;month=new Date(k+'T12:00:00');month.setDate(1);render();say('已记下准备睡觉的时间。明早再补充这一夜。');}catch(e){say('没有保存成功：'+e.message);}};
 for(const[id,delta]of [['prev',-1],['next',1]])$(id).onclick=()=>{month.setMonth(month.getMonth()+delta);renderCalendar();};
 document.querySelectorAll('[data-close]').forEach(b=>{b.type='button';b.onclick=()=>b.closest('dialog').close();});
-$('voiceOpen').onclick=()=>{$('voiceStatus').textContent='';$('voiceDialog').showModal();};
-$('listen').onclick=()=>{if(recognizer){recognizer.stop();return;}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$('voiceStatus').textContent='此浏览器不支持网页语音，请点击输入框，使用 iPhone 键盘的听写按钮。';$('speechText').focus();return;}const rec=new SR();recognizer=rec;rec.lang='zh-CN';rec.interimResults=false;rec.continuous=true;rec.onstart=()=>{$('voiceStatus').textContent='正在听，讲完后点击停止。';$('listen').textContent='停止说话';};rec.onresult=e=>{let parts=[];for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)parts.push(e.results[i][0].transcript);if(parts.length)$('speechText').value+=($('speechText').value?'，':'')+parts.join('，');};rec.onerror=()=>{$('voiceStatus').textContent='语音暂未完成。已识别的文字会保留，可重试或使用键盘听写。';};rec.onend=()=>{recognizer=null;$('listen').textContent='◉ 开始说话';if($('voiceStatus').textContent.startsWith('正在'))$('voiceStatus').textContent='已停止，核对文字后整理成确认卡。';};try{rec.start();}catch{recognizer=null;$('voiceStatus').textContent='无法启动语音，请使用键盘听写。';}};
-$('voiceDialog').addEventListener('close',()=>{if(recognizer)recognizer.stop();});
+function dictationHelp(){return /iPhone|iPad|iPod/.test(navigator.userAgent)?'点上方输入框，再点系统键盘上的麦克风开始说话。':/Mac/.test(navigator.platform||navigator.userAgent)?'点上方输入框，再按 Mac 键盘的听写键（麦克风图标），或在屏幕顶部“编辑”菜单中选择“开始听写”。如未开启，请在系统设置的“键盘 → 听写”中开启。':'点上方输入框，使用系统键盘的听写功能。';}
+const capture=VoiceCapture.create({Recognition:window.SpeechRecognition||window.webkitSpeechRecognition,getText:()=>$('speechText').value,onText:t=>$('speechText').value=t,onStatus:t=>{$('voiceStatus').textContent=t;if(/失败|结束|超时|没有|不支持|无法|不允许|被拒绝|中断/.test(t))$('dictationGuide').hidden=false;},onActive:active=>{$('listen').textContent=active?'停止说话':'◉ 试用网页语音';$('speechText').readOnly=active;$('parseVoice').disabled=active;}});
+$('voiceOpen').onclick=()=>{$('voiceStatus').textContent='';$('dictationHelp').textContent=dictationHelp();$('dictationGuide').hidden=location.protocol!=='file:';$('dictation').textContent=location.protocol==='file:'?'使用系统听写（推荐）':'使用系统听写';$('listen').textContent='◉ 试用网页语音';$('voiceDialog').showModal();};
+$('listen').onclick=()=>{if(capture.active)capture.stop();else capture.start();};
+$('dictation').onclick=()=>{capture.cancel();$('dictationGuide').hidden=false;$('dictationHelp').textContent=dictationHelp();$('speechText').focus();$('voiceStatus').textContent='输入框已准备好，请使用键盘听写功能开始说话。';};
+$('voiceDialog').addEventListener('close',()=>capture.cancel());
 $('parseVoice').onclick=()=>{const text=$('speechText').value.trim();if(!text){$('voiceStatus').textContent='请先说一句或输入描述。';return;}const parsed=S.parseSpeech(text);let r=parsed.record;const old=data.records[parsed.date];if(old){r=S.clone(old);for(const f of ['prepare','onset','final','out'])if(parsed.record[f]){r[f]=parsed.record[f];r.offsets[f]=parsed.record.offsets[f];}for(const f of ['state','feeling','dayFeeling'])if(parsed.record[f])r[f]=parsed.record[f];if(parsed.record.interruptions.length){r.interruptions=parsed.record.interruptions;r.complete=false;}if(r.state==='awake'){r.onset='';r.final='';r.interruptions=[];}r.transcript=text;r.source='口述补充';}
   $('voiceDialog').close();openEditor(parsed.date,r,['口述只整理为草稿，确认保存后才记入。请核对日期及当日 / 次日。',...parsed.warnings]);};
 function recordSummary(r){return [stateLabel(r),...events(r).map(e=>e.time+' '+e.label),feels[r.feeling]||'早上感觉未填',r.note].filter(Boolean).join('\n');}

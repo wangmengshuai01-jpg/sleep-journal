@@ -138,7 +138,12 @@
     matches.forEach((m,i)=>{
       let h=cn(m[2]),min=m[3]?({半:30,一刻:15,三刻:45})[m[3]]:(m[4]?cn(m[4]):0),period=m[1];
       const clause=text.slice(m.index+m[0].length,matches[i+1]?.index??text.length).split(/[，,。；;]/)[0];
-      let type=/起床/.test(clause)?'out':/(又|再|重新).*睡|睡回/.test(clause)?'resleep':/醒/.test(clause)?'wake':/上床|躺下|准备睡|关灯/.test(clause)?'prepare':/睡着|入睡/.test(clause)?'onset':null;
+      // Dictation often omits punctuation. Associate each time with the nearest
+      // following action, rather than letting a later wake-up override "上床".
+      const actions=[['out',/起床/],['resleep',/(?:又|再|重新)(?:次)?(?:睡着|入睡)|睡回/],['wake',/醒(?:来|了|过)?/],['prepare',/上床|躺下|准备睡|关灯/],['onset',/睡着|入睡/]];
+      const candidates=actions.map(([type,pattern])=>{const match=clause.match(pattern);return match?{type,index:match.index}:null;}).filter(Boolean).filter(action=>!['onset','wake','resleep'].includes(action.type)||!/(?:没(?:有)?|未|尚未)$/.test(clause.slice(0,action.index)));
+      candidates.sort((a,b)=>a.index-b.index);
+      let type=candidates[0]?.type||null;
       if(type==='wake' && (/(最后|最终)/.test(clause) || (['早上','上午'].includes(period) && !/(又|再|重新).*睡/.test(text.slice(m.index+m[0].length)))))type='final';
       if(!type){warnings.push('有时间未能确定用途，请手动补充。');return;}
       if(['晚上','下午'].includes(period)&&h<12)h+=12;if(period==='凌晨'&&h===12)h=0;

@@ -9,8 +9,8 @@
 <section class="card" aria-labelledby="calendarTitle"><div class="section-head"><div><div class="eyebrow">YOUR SLEEP JOURNAL</div><h2 id="calendarTitle">这一月的夜晚</h2></div><div class="month-nav"><button id="prev" aria-label="上个月">‹</button><span id="month"></span><button id="next" aria-label="下个月">›</button></div></div><div class="week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div><div class="calendar" id="calendar"></div><p class="legend">日期下显示准备睡觉时间 · 点击查看 / 补记<br>颜色是你的晨起感受：绿·精神不错 / 灰紫·一般 / 米黄·疲惫<br>睡眠时长后的 * 表示中断情况待确认；“跨度”未扣中断</p><div class="month-summary" id="monthSummary"></div></section>
 <section class="card"><div class="eyebrow">ONE SMALL STEP</div><h2>了解之后，试一小步</h2><p class="quiet" id="observation"></p><div class="idea"><strong>给作息留一点稳定</strong><p>可以尝试相对固定的起床时间，同时给自己留出足够的睡眠机会。过一段时间，再回看你的感受和记录。</p></div><details><summary>这些观察依据什么？</summary><p>根据你填写的时间和感受整理，不提供综合评分，也不能判断深睡、浅睡或诊断失眠。准备睡觉不等于已经睡着；没填写的项目保持未知。</p><p>18–60 岁成人通常建议每日睡眠至少 7 小时，仍要结合恢复感、连续性及个人情况。持续睡眠困难影响生活，或有憋醒、明显打鼾，可考虑专业评估。慢性失眠的一线治疗包括 CBT-I，普通习惯建议不能替代治疗。</p><div class="links"><a href="https://www.cdc.gov/sleep/about/" target="_blank" rel="noopener">CDC · 睡眠依据</a><a href="https://www.nhlbi.nih.gov/health/insomnia/treatment" target="_blank" rel="noopener">NIH · 失眠治疗</a></div></details></section>
 <section class="footer"><div class="footer-actions"><button id="export">导出备份</button><button id="import">导入文件</button><button id="history">历史数据</button></div><input type="file" id="importFile" accept=".json,application/json" hidden><p>记录保存在当前设备的浏览器中，不上传到公开网站。换设备或浏览器，需要导入备份。</p><div class="links"><a href="https://wangmengshuai01-jpg.github.io/sleep-journal/">返回原版</a><a href="https://wangmengshuai01-jpg.github.io/sleep-journal/experience-v2/">返回体验 V2</a><a href="wireframe.html" target="_blank">低保真设计稿</a></div><p>新旧版分别保存，之后的修改不会互相覆盖。</p></section><div id="status" class="status" role="status" aria-live="polite"></div></main></div>
-<dialog id="editor" aria-labelledby="editorTitle"><div class="sheet"><div class="dialog-head"><h2 id="editorTitle">记录这一晚</h2><button class="close" data-close aria-label="关闭编辑">×</button></div><p class="quiet">大概记得就好。不确定的时间可以留空。</p><div class="review-note" id="reviewNote"></div><form id="recordForm"><label for="date">哪一晚（开始准备睡觉所属的夜晚）</label><input id="date" type="date" required><div id="prepareField"></div><label for="state">这一晚的情况</label><select id="state"><option value="">暂不确定 / 只记准备睡觉</option><option value="continuous">睡过，没记得明显中断</option><option value="slept">睡过，中断情况不确定</option><option value="interrupted">睡眠中断</option><option value="awake">整夜没有睡着（自述）</option></select><div id="sleepFields"><div id="onsetField"></div><div id="interruptFields" hidden><div id="interruptions"></div><button type="button" id="addWake">＋ 再加一次中断</button><label class="check"><input type="checkbox" id="complete"><span>记得的中断已填写完整（不确定就不勾选）</span></label></div><div id="finalField"></div></div><div id="outField"></div><div class="fields-grid"><div><label for="feeling">早上感觉</label><select id="feeling"><option value="">未填写</option><option value="good">精神不错</option><option value="okay">一般</option><option value="tired">比较疲惫</option></select></div><div><label for="dayFeeling">白天困倦</label><select id="dayFeeling"><option value="">未填写</option><option value="alert">清醒</option><option value="somewhat">有点困</option><option value="sleepy">明显困倦</option></select></div></div><details id="noteDetails"><summary>备注 / 口述原文</summary><label for="note">补充说明</label><textarea id="note" maxlength="4000" rows="3"></textarea><p class="quiet" id="transcript"></p></details><p class="quiet">当日是所选日期，次日是第二天；凌晨通常选“次日”。</p><p class="error" id="formError" role="alert"></p><div class="form-actions"><button type="button" data-close>取消</button><button class="dark" type="submit" id="save">确认并保存</button></div><button type="button" class="danger" id="delete">删除新版中这一晚</button></form></div></dialog>
-<dialog id="voiceDialog" aria-labelledby="voiceTitle"><div class="sheet"><div class="dialog-head"><h2 id="voiceTitle">说说昨晚</h2><button class="close" data-close aria-label="关闭语音">×</button></div><p class="quiet">支持常见说法，整理后请核对。也可使用系统键盘的听写功能。</p><div class="review-note">例如：昨晚十一点上床，半小时后睡着，凌晨三点醒了，凌晨四点又睡着，早上七点醒来，七点半起床，今天有点累。</div><label for="speechText">你的描述</label><textarea id="speechText" placeholder="点下方开始说话，或者用键盘听写…" maxlength="4000"></textarea><p id="voiceStatus" class="quiet" role="status" aria-live="polite"></p><div class="notice" id="dictationGuide" hidden><strong>使用系统听写</strong><p id="dictationHelp"></p><p>文字出现后，点击“整理成确认卡”。网页不能替你开启系统听写。</p></div><button id="dictation" type="button">使用系统听写</button><button id="localListen" type="button" class="dark" hidden>◉ 开始录音（本机转文字）</button><div class="form-actions"><button id="listen">◉ 开始说话</button><button class="dark" id="parseVoice">整理成确认卡</button></div><p class="quiet" id="voicePrivacy">语音识别可能由浏览器服务处理；本站不保存录音。这里只实现网页语音，Siri 尚未直接接入。</p></div></dialog>
+<dialog id="editor" aria-labelledby="editorTitle"><div class="sheet"><div class="dialog-head"><h2 id="editorTitle">记录这一晚</h2><button class="close" data-close aria-label="关闭编辑">×</button></div><p class="quiet">大概记得就好。不确定的时间可以留空。</p><div class="review-note" id="reviewNote"></div><div id="voiceReview" class="notice" hidden><strong id="voiceTarget"></strong><p id="voiceExisting"></p><label for="voiceMergeMode">这次如何填写</label><select id="voiceMergeMode"><option value="merge">补充已有记录（口述优先，未提到的保留）</option><option value="replace">仅使用本次口述（未提到的留空）</option></select><details><summary>对照已有记录与本次口述</summary><div id="voiceComparison"></div></details></div><form id="recordForm"><label for="date">哪一晚（开始准备睡觉所属的夜晚）</label><input id="date" type="date" required><div id="prepareField"></div><label for="state">这一晚的情况</label><select id="state"><option value="">暂不确定 / 只记准备睡觉</option><option value="continuous">睡过，没记得明显中断</option><option value="slept">睡过，中断情况不确定</option><option value="interrupted">睡眠中断</option><option value="awake">整夜没有睡着（自述）</option></select><div id="sleepFields"><div id="onsetField"></div><div id="interruptFields" hidden><div id="interruptions"></div><button type="button" id="addWake">＋ 再加一次中断</button><label class="check"><input type="checkbox" id="complete"><span>记得的中断已填写完整（不确定就不勾选）</span></label></div><div id="finalField"></div></div><div id="outField"></div><div class="fields-grid"><div><label for="feeling">早上感觉</label><select id="feeling"><option value="">未填写</option><option value="good">精神不错</option><option value="okay">一般</option><option value="tired">比较疲惫</option></select></div><div><label for="dayFeeling">白天困倦</label><select id="dayFeeling"><option value="">未填写</option><option value="alert">清醒</option><option value="somewhat">有点困</option><option value="sleepy">明显困倦</option></select></div></div><details id="noteDetails"><summary>备注 / 口述原文</summary><label for="note">补充说明</label><textarea id="note" maxlength="4000" rows="3"></textarea><p class="quiet" id="transcript"></p></details><p class="quiet">当日是所选日期，次日是第二天；凌晨通常选“次日”。</p><p class="error" id="formError" role="alert"></p><div class="form-actions"><button type="button" data-close>取消</button><button class="dark" type="submit" id="save">确认并保存</button></div><button type="button" class="danger" id="delete">删除新版中这一晚</button></form></div></dialog>
+<dialog id="voiceDialog" aria-labelledby="voiceTitle"><div class="sheet"><div class="dialog-head"><h2 id="voiceTitle">说说昨晚</h2><button class="close" data-close aria-label="关闭语音">×</button></div><p class="quiet">默认补记前一晚；也可说“补录11月4日晚上”。说完整理到表单，核对后再保存。</p><div class="review-note">例如：昨晚十一点上床，半小时后睡着，凌晨三点醒了，凌晨四点又睡着，早上七点醒来，七点半起床，今天有点累。</div><label for="speechText">你的描述</label><textarea id="speechText" placeholder="例如：补录11月4日晚上，十一点上床，半小时后睡着，早上七点醒来…" maxlength="4000"></textarea><p id="voiceStatus" class="quiet" role="status" aria-live="polite"></p><div class="notice" id="dictationGuide" hidden><strong>使用系统听写</strong><p id="dictationHelp"></p><p>文字出现后，点击“整理成确认卡”。网页不能替你开启系统听写。</p></div><button id="dictation" type="button">使用系统听写</button><button id="localListen" type="button" class="dark" hidden>◉ 开始录音（本机转文字）</button><div class="form-actions"><button id="listen">◉ 开始说话</button><button class="dark" id="parseVoice">整理成确认卡</button></div><p class="quiet" id="voicePrivacy">语音识别可能由浏览器服务处理；本站不保存录音。这里只实现网页语音，Siri 尚未直接接入。</p></div></dialog>
 <dialog id="historyDialog" aria-labelledby="historyTitle"><div class="sheet"><div class="dialog-head"><h2 id="historyTitle">历史记录与备份</h2><button class="close" data-close aria-label="关闭历史记录">×</button></div><p class="quiet">首次打开时自动复制同一浏览器里的原版与 V2 记录。原版不变，同一天有差异的两份记录都保留。若另一版有新增记录，可再次检查。</p><p id="historyStats"></p><button id="rescan">再次检查旧版记录</button><div id="conflicts"></div><details><summary>为什么没有找到手机里的记录？</summary><p>请用曾经记录的同一个浏览器打开此链接。微信内置浏览器、Safari、主屏幕入口可能各有独立数据。仍找不到时，在旧版导出备份，再到这里导入。已被浏览器清除且没有备份的数据，网站无法恢复。</p></details><p class="quiet">导出文件包含当前记录、导入原始快照和待核对版本，请保管好。导入文件时保留现有记录，同日差异进入核对列表。</p></div></dialog>
 <script>
 (function (root) {
@@ -140,13 +140,56 @@
     storage.setItem(KEY,text);if(storage.getItem(KEY)!==text)throw Error('保存未通过检查，请导出备份并重试。');return output;
   }
   const cn=s=>{if(/^\d+$/.test(s))return +s;const digits={'零':0,'〇':0,'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};if(s.includes('十')){let[a,b]=s.split('十');return (a?digits[a]:1)*10+(b?digits[b]:0);}return digits[s]??NaN;};
+  function speechDate(text,now=new Date()) {
+    const warnings=[],num='[零〇一二两三四五六七八九十\\d]+';
+    const todayPattern=new RegExp('今天(?:是)?\\s*(?:(\\d{4})年)?(?:('+num+')月)?('+num+')(?:号|日)');
+    const today=text.match(todayPattern),anchor=new Date(now);
+    if(today){const k=`${today[1]||anchor.getFullYear()}-${pad(today[2]?cn(today[2]):anchor.getMonth()+1)}-${pad(cn(today[3]))}`;if(dateValid(k)){anchor.setTime(new Date(k+'T12:00:00').getTime());if(k!==dateKey(now))warnings.push('口述的今天与设备日期不同，已按口述日期理解，请核对。');}}
+    let work=text.replace(todayPattern,'');
+    const full=[...work.matchAll(/([零〇一二三四五六七八九\d]{4})[-年/]([零〇一二三四五六七八九十\d]+)[-月/]([零〇一二三四五六七八九十\d]+)(?:[日号])?/g)];
+    const md=[...work.matchAll(new RegExp('('+num+')月\\s*('+num+')(?:日|号)','g'))];
+    const days=[...work.matchAll(new RegExp('('+num+')(?:日|号)','g'))];
+    let k='',basis='默认记录前一晚';
+    if(full.length>1||(!full.length&&md.length>1)||(!full.length&&!md.length&&days.length>1))return {date:'',basis:'提到了多个日期',warnings:[...warnings,'一次整理一晚。请在表单中选择本次要保存的夜晚，原文已保留。']};
+    let match=full[0]||md[0]||days[0];
+    if(match){
+      if(full.length)k=`${[...match[1]].map(c=>/\d/.test(c)?c:cn(c)).join('')}-${pad(cn(match[2]))}-${pad(cn(match[3]))}`;
+      else if(md.length){let y=anchor.getFullYear();k=`${y}-${pad(cn(match[1]))}-${pad(cn(match[2]))}`;if(dateValid(k)&&k>dateKey(anchor))k=`${y-1}-${pad(cn(match[1]))}-${pad(cn(match[2]))}`;}
+      else{const day=cn(match[1]);if(day<1||day>31)return {date:'',basis:'日期无效',warnings:[...warnings,'未能识别有效日期，请手动选择。']};const d=new Date(anchor);d.setDate(1);for(let i=0;i<12;i++){const candidate=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(day)}`;if(dateValid(candidate)&&candidate<=dateKey(anchor)){k=candidate;break;}d.setMonth(d.getMonth()-1);}basis='仅说日号，按最近已过去的该日理解';}
+      if(!dateValid(k))return {date:'',basis:'日期无效',warnings:[...warnings,'口述日期不存在，请手动选择夜晚。']};
+      const after=work.slice(match.index+match[0].length,match.index+match[0].length+18);
+      if(/^(?:的)?(?:早上|早晨|上午|清晨)/.test(after)){const d=new Date(k+'T12:00:00');d.setDate(d.getDate()-1);k=dateKey(d);basis='口述的是早晨日期，记录其前一晚';}
+      else if(basis==='默认记录前一晚')basis='按明确说出的夜晚日期补录';
+    }else if(/大前天|大前晚/.test(work)){const d=new Date(anchor);d.setDate(d.getDate()-3);k=dateKey(d);basis='大前晚';}
+    else if(/前天|前晚/.test(work)){const d=new Date(anchor);d.setDate(d.getDate()-2);k=dateKey(d);basis='前一晚之前的一晚';}
+    else if(/今晚|现在.*(?:准备睡|上床|睡觉)/.test(work)){k=night(anchor);basis='记录现在准备睡觉的夜晚';}
+    else{k=yesterday(anchor);}
+    return {date:k,basis,warnings};
+  }
+  function speechDraft(previous,spoken,mode='merge',providedFields=null) {
+    const fields=providedFields||['prepare','onset','final','out','state','feeling','dayFeeling','note'].filter(f=>spoken[f]);
+    const result=clone(mode==='merge'&&previous?previous:newRecord());
+    for(const f of fields){result[f]=clone(spoken[f]);if(['prepare','onset','final','out'].includes(f))result.offsets[f]=spoken.offsets?.[f]??dayFor(spoken[f]);}
+    if(fields.includes('state')){
+      result.state=spoken.state;
+      if(['continuous','awake'].includes(result.state)){result.interruptions=[];result.complete=result.state==='continuous';}
+    }
+    if(spoken.interruptions.length&&(!providedFields||fields.includes('interruptions'))){result.interruptions=clone(spoken.interruptions);result.complete=spoken.complete;}
+    if(fields.includes('interruptions'))result.interruptions=clone(spoken.interruptions);
+    if(fields.includes('complete'))result.complete=spoken.complete;
+    if(result.state==='awake'&&spoken.onset&&!fields.includes('state'))result.state='';
+    if(result.state==='awake'){result.onset='';result.final='';result.interruptions=[];}
+    result.transcript=spoken.transcript;result.source=previous&&mode==='merge'?'口述补充':'口述补录';
+    return result;
+  }
   function parseSpeech(text,now=new Date()) {
-    let r=newRecord(),k=yesterday(now),warnings=[];
-    if(/前晚|前天/.test(text)){let d=new Date(now);d.setDate(d.getDate()-2);k=dateKey(d);}
-    if(/今晚|现在/.test(text)&&!/昨晚|昨天/.test(text))k=night(now);
+    const originalText=text;
+    text=text.replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248)).replace(/[點時鐘兩]/g,c=>({'點':'点','時':'时','鐘':'钟','兩':'两'})[c]);
+    const target=speechDate(text,now);let r=newRecord(),k=target.date,warnings=[...target.warnings];
+    if(target.basis==='提到了多个日期'){r.transcript=originalText;r.source='口述整理';return {date:'',record:r,providedFields:[],dateBasis:target.basis,warnings};}
     if(/现在.*(?:准备睡|上床|睡觉)/.test(text)){r.prepare=`${pad(now.getHours())}:${pad(now.getMinutes())}`;r.offsets.prepare=dayFor(r.prepare);}
     const regex=/(凌晨|早上|上午|中午|下午|晚上|夜里)?\s*([零〇一二两三四五六七八九十\d]{1,3})(?:点|[:：])(?:(半|一刻|三刻)|([零〇一二两三四五六七八九十\d]{1,3})(?:分)?)?/g;
-    const matches=[...text.matchAll(regex)];let pending=null;
+    const matches=[...text.matchAll(regex)];let pending=null,firstWakeAt=text.length;
     matches.forEach((m,i)=>{
       let h=cn(m[2]),min=m[3]?({半:30,一刻:15,三刻:45})[m[3]]:(m[4]?cn(m[4]):0),period=m[1];
       const clause=text.slice(m.index+m[0].length,matches[i+1]?.index??text.length).split(/[，,。；;]/)[0];
@@ -156,6 +199,7 @@
       const candidates=actions.map(([type,pattern])=>{const match=clause.match(pattern);return match?{type,index:match.index}:null;}).filter(Boolean).filter(action=>!['onset','wake','resleep'].includes(action.type)||!/(?:没(?:有)?|未|尚未)$/.test(clause.slice(0,action.index)));
       candidates.sort((a,b)=>a.index-b.index);
       let type=candidates[0]?.type||null;
+      if(!type){const before=text.slice(Math.max(0,m.index-20),m.index);const prefix=before.match(/(准备睡觉|上床|最后醒来|醒来|起床|入睡|睡着)(?:的时间)?(?:是|在|大概|大约|约为)?\s*$/);if(prefix)type=({准备睡觉:'prepare',上床:'prepare',最后醒来:'final',醒来:'wake',起床:'out',入睡:'onset',睡着:'onset'})[prefix[1]];}
       if(type==='wake' && (/(最后|最终)/.test(clause) || (['早上','上午'].includes(period) && !/(又|再|重新).*睡/.test(text.slice(m.index+m[0].length)))))type='final';
       if(!type){warnings.push('有时间未能确定用途，请手动补充。');return;}
       if(['晚上','下午'].includes(period)&&h<12)h+=12;if(period==='凌晨'&&h===12)h=0;
@@ -163,23 +207,28 @@
       if(!period&&h>=1&&h<=11&&['prepare','onset'].includes(type)){h+=12;warnings.push('未说上午或晚上，准备睡觉 / 入睡暂按晚上理解，请核对。');}
       if(h>23||min>59||!Number.isFinite(h)||!Number.isFinite(min)){warnings.push('有时间无法识别，请手动修正。');return;}
       const t=`${pad(h)}:${pad(min)}`,day=['out','wake','resleep','final'].includes(type)?1:dayFor(t);
-      if(type==='wake'){pending={wake:t,wakeDay:day,resleep:'',resleepDay:1,outcome:'unknown'};r.interruptions.push(pending);r.state='interrupted';}
+      if(type==='wake'){firstWakeAt=Math.min(firstWakeAt,m.index);pending={wake:t,wakeDay:day,resleep:'',resleepDay:1,outcome:'unknown'};r.interruptions.push(pending);r.state='interrupted';}
       else if(type==='resleep'){if(pending){pending.resleep=t;pending.resleepDay=day;pending.outcome='reslept';}else warnings.push('识别到再次入睡，请补充之前醒来的时间。');}
       else{r[type]=t;r.offsets[type]=day;}
+      if(type==='wake'&&pending){const delay=clause.match(/(半|[零〇一二两三四五六七八九十\d]+)(小时|分钟|分)(?:后|左右后|左右)?(?:又|再|重新)?(?:次)?(?:睡着|入睡)/);if(delay){const n=delay[1]==='半'?0.5:cn(delay[1]),v=minutes(t,day)+n*(delay[2]==='小时'?60:1);if(Number.isFinite(v)&&v<4320){pending.resleep=`${pad(Math.floor(v/60)%24)}:${pad(v%60)}`;pending.resleepDay=Math.floor(v/1440);pending.outcome='reslept';}}}
     });
-    const latency=text.match(/(?:大概|大约|约|过了|躺了)?\s*(半|[零〇一二两三四五六七八九十\d]+)\s*(小时|分钟|分)(?:后|才|左右)?\s*(?:睡着|入睡)/);
+    const latency=text.slice(0,firstWakeAt).match(/(?:大概|大约|约|过了|躺了)?\s*(半|[零〇一二两三四五六七八九十\d]+)\s*(小时|分钟|分)(?:后|才|左右)?\s*(?:睡着|入睡)/);
     if(latency&&r.prepare&&!r.onset){const n=latency[1]==='半'?0.5:cn(latency[1]),duration=n*(latency[2]==='小时'?60:1),v=minutes(r.prepare,r.offsets.prepare)+duration;if(Number.isFinite(v)&&v<4320){r.onset=`${pad(Math.floor(v/60)%24)}:${pad(v%60)}`;r.offsets.onset=Math.floor(v/1440);}}
     if(/整夜(?:都)?(?:没睡|没(?:有)?睡着|未睡)|一夜(?:都)?(?:没睡|没(?:有)?睡着)/.test(text)){r.state='awake';r.onset='';r.interruptions=[];}
     else if(/没(?:有)?再睡|再也没(?:有)?睡|未再入睡/.test(text)&&pending){pending.outcome='no_resleep';pending.resleep='';r.final=pending.wake;r.offsets.final=pending.wakeDay;}
     else if(/没(?:有)?醒|一觉(?:睡)?到/.test(text)&&r.interruptions.length===0)r.state='continuous';
+    if(!r.state&&/(?:睡眠中断|夜里醒|半夜醒|醒了[零〇一二两三四五六七八九十\d]+次)/.test(text)){r.state='interrupted';r.interruptions=[{wake:'',wakeDay:1,resleep:'',resleepDay:1,outcome:'unknown'}];warnings.push('提到了夜间中断，具体时间未识别，请补充。');}
+    const wakeCount=text.match(/(?:醒了|醒过|中断)([零〇一二两三四五六七八九十\d]+)次/);if(wakeCount&&cn(wakeCount[1])>r.interruptions.length){r.state='interrupted';while(r.interruptions.length<Math.min(10,cn(wakeCount[1])))r.interruptions.push({wake:'',wakeDay:1,resleep:'',resleepDay:1,outcome:'unknown'});warnings.push('已按口述次数列出中断，缺少的时间请补充。');}
     if(/疲惫|有点累|很累|没精神/.test(text))r.feeling='tired';else if(/精神不错|精神很好|很精神/.test(text))r.feeling='good';else if(/感觉一般/.test(text))r.feeling='okay';
-    if(/白天.*(?:很困|犯困|打瞌睡)/.test(text))r.dayFeeling='sleepy';
+    if(/白天.*(?:很困|明显困|犯困|打瞌睡)/.test(text))r.dayFeeling='sleepy';else if(/白天.*(?:有点困|有些困)/.test(text))r.dayFeeling='somewhat';else if(/白天.*(?:不困|清醒)/.test(text))r.dayFeeling='alert';
     if(r.out&&!r.final)warnings.push('起床不等于最后醒来，请补充最后醒来时间。');
     if(r.interruptions.length)warnings.push('请确认中断是否已记全，未确认前不估算睡眠总时长。');
-    r.transcript=text;r.source='口述整理';r.note='';
-    return {date:k,record:r,warnings:[...new Set(warnings)]};
+    r.transcript=originalText;r.source='口述整理';r.note=text.match(/(?:备注|补充说明)[：:，,]?([\s\S]+)/)?.[1]?.trim()||'';
+    if(r.state==='continuous')r.complete=true;
+    const providedFields=['prepare','onset','final','out','state','feeling','dayFeeling','note'].filter(f=>r[f]);if(r.interruptions.length||['continuous','awake'].includes(r.state))providedFields.push('interruptions','complete');
+    return {date:k,record:r,providedFields,dateBasis:target.basis,warnings:[...new Set(warnings)]};
   }
-  root.Sleep={KEY,pad,dateKey,dateValid,timeValid,dayFor,minutes,night,yesterday,clone,empty,newRecord,normalize,validate,metrics,review,merge,load,save,parseSpeech};
+  root.Sleep={KEY,pad,dateKey,dateValid,timeValid,dayFor,minutes,night,yesterday,clone,empty,newRecord,normalize,validate,metrics,review,merge,load,save,speechDate,speechDraft,parseSpeech};
 })(globalThis);
 
 </script>
@@ -231,34 +280,36 @@
     str(0,'RIFF');view.setUint32(4,36+samples.length*2,true);str(8,'WAVE');str(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);view.setUint32(24,16000,true);view.setUint32(28,32000,true);view.setUint16(32,2,true);view.setUint16(34,16,true);str(36,'data');view.setUint32(40,samples.length*2,true);
     for(let i=0;i<samples.length;i++){const n=Math.max(-1,Math.min(1,samples[i]));view.setInt16(44+i*2,n<0?n*32768:n*32767,true);}return new Blob([bytes],{type:'audio/wav'});
   }
-  function create({config,media=navigator.mediaDevices,Recorder=globalThis.MediaRecorder,onStatus,onText,onActive,getText,request=fetch}){
+  function create({config,media=navigator.mediaDevices,Recorder=globalThis.MediaRecorder,onStatus,onText,onActive,getText,request=fetch,onDiagnostic=()=>{}}){
     let session=null;
     async function start(){
       if(session)return;
       if(!config||!media?.getUserMedia||!Recorder){onStatus('当前环境不支持本地录音，请使用系统听写。');return;}
-      const s={cancelled:false,stream:null,rec:null,parts:[],timer:null,controller:new AbortController(),base:getText()};session=s;onActive(true);onStatus('正在准备本地语音…');
+      let stage='连接本机服务';const diagnostic=(event,error=null)=>{onDiagnostic({at:new Date().toISOString(),stage,event,error:error?{name:error.name||'Error',message:String(error.message||error)}:null});};
+      const s={startedAt:0,stopRequested:false,cancelled:false,stream:null,rec:null,parts:[],timer:null,controller:new AbortController(),base:getText()};session=s;onActive(true);onStatus('正在准备本地语音…');
+      diagnostic('start');
       const release=()=>{clearTimeout(s.timer);s.stream?.getTracks().forEach(t=>t.stop());if(session===s){session=null;onActive(false);}};
       const headers={Authorization:'Bearer '+config.token};
       try{
         const health=await request(config.endpoint+'/health',{headers,signal:AbortSignal.timeout(5000)});if(!health.ok)throw Error('本地语音服务未启动。请双击项目里的“启动本地语音.command”。');
-        if(s.cancelled){release();return;}s.stream=await media.getUserMedia({audio:true});if(s.cancelled){release();return;}
-        s.rec=new Recorder(s.stream);s.rec.ondataavailable=e=>{if(e.data.size)s.parts.push(e.data);};
-        s.rec.onerror=()=>{s.cancelled=true;onStatus('麦克风录音失败，请检查系统权限。');release();};
+        if(s.cancelled){release();return;}stage='获取麦克风';diagnostic('request');s.stream=await media.getUserMedia({audio:true});if(s.cancelled){release();return;}
+        stage='创建录音';diagnostic('create');s.rec=new Recorder(s.stream);s.rec.ondataavailable=e=>{if(e.data.size)s.parts.push(e.data);};
+        s.rec.onerror=e=>{diagnostic('recorder-error',e.error||Error('MediaRecorder error'));s.cancelled=true;onStatus('麦克风录音失败，请检查系统权限。');release();};
         s.rec.onstop=async()=>{
-          clearTimeout(s.timer);s.stream.getTracks().forEach(t=>t.stop());if(s.cancelled){release();return;}
+          diagnostic(s.stopRequested?'user-stop':'recorder-ended');clearTimeout(s.timer);s.stream.getTracks().forEach(t=>t.stop());if(s.cancelled){release();return;}
           onStatus('正在本机转成文字，请稍等…');
           s.timer=setTimeout(()=>s.controller.abort(),120000);
           try{
-            const original=new Blob(s.parts,{type:s.rec.mimeType||'audio/webm'});const blob=await toWav(original);if(!blob.size)throw Error('没有录到声音，请重试。');
-            const response=await request(config.endpoint+'/transcribe',{method:'POST',headers:{...headers,'Content-Type':blob.type},body:blob,signal:s.controller.signal});
+            stage='解码录音';diagnostic('decode');const original=new Blob(s.parts,{type:s.rec.mimeType||'audio/webm'});const blob=await toWav(original);if(!blob.size)throw Error('没有录到声音，请重试。');
+            stage='本机转文字';diagnostic('transcribe');const response=await request(config.endpoint+'/transcribe',{method:'POST',headers:{...headers,'Content-Type':blob.type},body:blob,signal:s.controller.signal});
             const result=await response.json();if(!response.ok)throw Error(result.error||'本地转写失败。');
-            if(!s.cancelled){if(result.text){onText([s.base,result.text].filter(Boolean).join('，'));onStatus('已转成文字。请核对后整理成确认卡。');}else onStatus('没有识别到讲话，请靠近麦克风重试。');}
-          }catch(e){if(!s.cancelled)onStatus(e.name==='AbortError'?'转写等待超时，请重试。':e.message);}finally{release();}
+            diagnostic(result.text?'success':'empty-audio');if(!s.cancelled){if(result.text){onText([s.base,result.text].filter(Boolean).join('，'));onStatus('已转成文字。请核对后整理成确认卡。');}else onStatus('没有识别到讲话，请靠近麦克风重试。');}
+          }catch(e){diagnostic('failure',e);if(!s.cancelled)onStatus(e.name==='AbortError'?'转写等待超时，请重试。':stage+'失败（'+(e.name||'Error')+'）：'+e.message);}finally{release();}
         };
-        s.rec.start();onStatus('正在录音。讲完后点“停止并转文字”。录音只在这台电脑上处理。');s.timer=setTimeout(()=>stop(),120000);
-      }catch(e){if(!s.cancelled)onStatus(e.name==='NotAllowedError'?'麦克风权限未获允许，请检查系统与浏览器权限。':e.message.includes('本地')?e.message:'无法连接本地语音，请双击“启动本地语音.command”后重试。');release();}
+        s.rec.start();s.startedAt=Date.now();stage='录音中';diagnostic('recording');s.stream.getAudioTracks().forEach(track=>track.addEventListener('ended',()=>diagnostic('microphone-ended')));onStatus('正在录音。讲完后点“停止并转文字”。录音只在这台电脑上处理。');s.timer=setTimeout(()=>stop(),120000);
+      }catch(e){diagnostic('failure',e);if(!s.cancelled){const detail=e.name==='NotAllowedError'?(stage==='获取麦克风'?'麦克风访问被拒绝；网页许可和系统麦克风许可都需要允许。':'当前页面访问本机服务被浏览器拒绝。'):e.name==='NotFoundError'?'没有找到可用麦克风。':e.name==='NotReadableError'?'无法读取麦克风，设备可能正被占用或系统未允许访问。':e.message;onStatus(stage+'失败（'+(e.name||'Error')+'）：'+detail);}release();}
     }
-    function stop(){if(session?.rec?.state==='recording')session.rec.stop();}
+    function stop(){if(session?.rec?.state==='recording'){session.stopRequested=true;session.rec.stop();}}
     function cancel(){const s=session;if(!s)return;s.cancelled=true;clearTimeout(s.timer);s.controller.abort();s.stream?.getTracks().forEach(t=>t.stop());if(s.rec?.state==='recording')s.rec.stop();session=null;onActive(false);}
     return {start,stop,cancel,get active(){return session!==null;}};
   }
@@ -267,7 +318,7 @@
 
 'use strict';
 const S=Sleep,$=id=>document.getElementById(id),el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x;};
-let data=S.empty(),locked=false,selected=S.yesterday(),month=new Date(selected+'T12:00:00'),editKey=null,draft=null,wakes=[],storageIssues=[],migrationMessage='';month.setDate(1);
+let data=S.empty(),locked=false,selected=S.yesterday(),month=new Date(selected+'T12:00:00'),editKey=null,draft=null,voiceDraft=null,wakes=[],storageIssues=[],migrationMessage='';month.setDate(1);
 const feels={good:'精神不错',okay:'一般',tired:'比较疲惫'},dayFeels={alert:'白天清醒',somewhat:'白天有点困',sleepy:'白天明显困倦'};
 const duration=n=>n==null?'待补充':n===0?'0 分钟':`${Math.floor(n/60)?Math.floor(n/60)+' 小时 ':''}${n%60?n%60+' 分':''}`.trim();
 const timeLabel=(t,d)=>t?(['当日','次日','后日'][d??S.dayFor(t)]+' '+t):'未填写';
@@ -338,11 +389,11 @@ function timeField(host,id,label,value='',day=0){host.replaceChildren();const l=
 function collectWakes(){return [...$('interruptions').children].map((card,i)=>({wake:$('wake'+i).value,wakeDay:+$('wake'+i+'Day').value,resleep:$('resleep'+i).value,resleepDay:+$('resleep'+i+'Day').value,outcome:$('outcome'+i).value}));}
 function renderWakes(){const list=$('interruptions');list.replaceChildren();wakes.forEach((w,i)=>{const card=el('div','wake-card'),head=el('div','wake-head');head.append(el('strong','',`第 ${i+1} 次中断`));const remove=el('button','','移除');remove.type='button';remove.onclick=()=>{wakes=collectWakes();wakes.splice(i,1);renderWakes();};head.append(remove);card.append(head);const wf=el('div');timeField(wf,'wake'+i,'醒来的时间（估计）',w.wake,w.wakeDay??1);card.append(wf);const l=el('label','','后来怎么样');l.htmlFor='outcome'+i;card.append(l);const outcome=el('select');outcome.id='outcome'+i;for(const[v,t]of [['unknown','不确定 / 暂未填写'],['reslept','后来又睡着了'],['no_resleep','醒后未再入睡']]){const opt=el('option','',t);opt.value=v;outcome.append(opt);}outcome.value=w.outcome||'unknown';card.append(outcome);const rf=el('div');timeField(rf,'resleep'+i,'再次入睡的时间（估计）',w.resleep,w.resleepDay??1);rf.hidden=outcome.value!=='reslept';card.append(rf);outcome.onchange=()=>rf.hidden=outcome.value!=='reslept';list.append(card);});}
 function updateFields(){const state=$('state').value;$('sleepFields').hidden=state==='awake';$('interruptFields').hidden=state!=='interrupted';}
-function openEditor(k,provided=null,warnings=[]){editKey=data.records[k]?k:null;draft=S.clone(provided||data.records[k]||S.newRecord());$('editorTitle').textContent=provided?'核对这张记录卡':'记录这一晚';$('date').value=k;$('reviewNote').textContent=warnings.join('\n');if(provided&&data.records[k])$('reviewNote').textContent+='\n该夜晚已有记录，本次口述会作为补充；请检查已有内容。';
+function openEditor(k,provided=null,warnings=[],voiceContext=null){voiceDraft=voiceContext;$('voiceReview').hidden=!voiceContext;editKey=data.records[k]?k:null;draft=S.clone(provided||data.records[k]||S.newRecord());$('editorTitle').textContent=provided?'核对这张记录卡':'记录这一晚';$('date').value=k;$('reviewNote').textContent=warnings.join('\n');if(provided&&data.records[k]&&!voiceContext)$('reviewNote').textContent+='\n该夜晚已有记录，本次口述会作为补充；请检查已有内容。';
   for(const[f,label]of [['prepare','准备睡觉的时间'],['onset','估计睡着的时间'],['final','最后醒来的时间'],['out','起床时间']])timeField($(f+'Field'),f,label,draft[f],draft.offsets?.[f]??(['final','out'].includes(f)?1:S.dayFor(draft[f])));
-  $('state').value=draft.state;$('feeling').value=draft.feeling;$('dayFeeling').value=draft.dayFeeling;$('note').value=draft.note;$('transcript').textContent=draft.transcript?'口述原文：'+draft.transcript:'';$('complete').checked=draft.complete;wakes=S.clone(draft.interruptions);renderWakes();updateFields();$('formError').textContent='';$('delete').hidden=!editKey;$('editor').showModal();}
+  $('state').value=draft.state;$('feeling').value=draft.feeling;$('dayFeeling').value=draft.dayFeeling;$('note').value=draft.note;$('transcript').textContent=draft.transcript?'口述原文：'+draft.transcript:'';$('complete').checked=draft.complete;wakes=S.clone(draft.interruptions);renderWakes();updateFields();$('formError').textContent='';$('delete').hidden=!editKey;if(!$('editor').open)$('editor').showModal();}
 function readForm(){const r=S.clone(draft);for(const f of ['prepare','onset','final','out']){r[f]=$(f).value;r.offsets[f]=+$(f+'Day').value;}r.state=$('state').value;r.feeling=$('feeling').value;r.dayFeeling=$('dayFeeling').value;r.note=$('note').value;r.complete=$('complete').checked;r.interruptions=r.state==='interrupted'?collectWakes().map(w=>({...w,resleep:w.outcome==='reslept'?w.resleep:''})):[];if(r.state==='awake'){r.onset='';r.final='';}r.updatedAt=new Date().toISOString();return r;}
-$('recordForm').onsubmit=e=>{e.preventDefault();try{const k=$('date').value,r=readForm(),err=S.validate(k,r);if(err)throw Error(err);if(editKey!==k&&data.records[k])throw Error('这个日期已有记录。请先取消，再从月历打开该日期编辑，避免覆盖。');const next=S.clone(data);if(editKey&&editKey!==k){delete next.records[editKey];if(!next.deleted.includes(editKey))next.deleted.push(editKey);}next.records[k]=r;next.deleted=next.deleted.filter(d=>d!==k);commit(next);selected=k;month=new Date(k+'T12:00:00');month.setDate(1);$('editor').close();render();const m=S.metrics(r);say(m.needsContinuity?'已保存并更新：入睡至醒来跨度 '+duration(m.span)+'。请在卡片确认是否有中断。':m.total!=null?'已保存并更新：估计睡眠 '+duration(m.total)+'。':'已保存。'+m.reason);}catch(e){$('formError').textContent=e.message;}};
+$('recordForm').onsubmit=e=>{e.preventDefault();try{const k=$('date').value,r=readForm(),err=S.validate(k,r);if(err)throw Error(err);if(editKey!==k&&data.records[k])throw Error('这个日期已有记录。请先取消，再从月历打开该日期编辑，避免覆盖。');const next=S.clone(data);if(editKey&&editKey!==k){delete next.records[editKey];if(!next.deleted.includes(editKey))next.deleted.push(editKey);}if(voiceDraft&&data.records[k])next.snapshots.push({source:'语音修改前 '+k,at:new Date().toISOString(),raw:JSON.stringify({[k]:data.records[k]})});next.records[k]=r;next.deleted=next.deleted.filter(d=>d!==k);commit(next);selected=k;month=new Date(k+'T12:00:00');month.setDate(1);$('editor').close();render();const m=S.metrics(r);say(m.needsContinuity?'已保存并更新：入睡至醒来跨度 '+duration(m.span)+'。请在卡片确认是否有中断。':m.total!=null?'已保存并更新：估计睡眠 '+duration(m.total)+'。':'已保存。'+m.reason);}catch(e){$('formError').textContent=e.message;}};
 $('state').onchange=()=>{if($('state').value==='interrupted'&&!$('interruptions').children.length){wakes=[{wake:'',resleep:'',outcome:'unknown',wakeDay:1,resleepDay:1}];renderWakes();}updateFields();};
 $('addWake').onclick=()=>{wakes=collectWakes();wakes.push({wake:'',resleep:'',outcome:'unknown',wakeDay:1,resleepDay:1});renderWakes();};
 $('delete').onclick=()=>{if(!editKey||!confirm('仅删除新版中这一晚。旧版记录仍保留，自动导入不会把它重新加回来。'))return;try{const next=S.clone(data);delete next.records[editKey];if(!next.deleted.includes(editKey))next.deleted.push(editKey);commit(next);$('editor').close();render();say('已从新版删除，旧版未改动。');}catch(e){$('formError').textContent=e.message;}};
@@ -352,15 +403,30 @@ for(const[id,delta]of [['prev',-1],['next',1]])$(id).onclick=()=>{month.setMonth
 document.querySelectorAll('[data-close]').forEach(b=>{b.type='button';b.onclick=()=>b.closest('dialog').close();});
 function dictationHelp(){return /iPhone|iPad|iPod/.test(navigator.userAgent)?'点上方输入框，再点系统键盘上的麦克风开始说话。':/Mac/.test(navigator.platform||navigator.userAgent)?'点上方输入框，再按 Mac 键盘的听写键（麦克风图标），或在屏幕顶部“编辑”菜单中选择“开始听写”。如未开启，请在系统设置的“键盘 → 听写”中开启。':'点上方输入框，使用系统键盘的听写功能。';}
 const capture=VoiceCapture.create({Recognition:window.SpeechRecognition||window.webkitSpeechRecognition,getText:()=>$('speechText').value,onText:t=>$('speechText').value=t,onStatus:t=>{$('voiceStatus').textContent=t;if(/失败|结束|超时|没有|不支持|无法|不允许|被拒绝|中断/.test(t))$('dictationGuide').hidden=false;},onActive:active=>{$('listen').textContent=active?'停止说话':'◉ 试用网页语音';$('speechText').readOnly=active;$('parseVoice').disabled=active;}});
-const localCapture=LocalVoice.create({config:window.LOCAL_VOICE_CONFIG,getText:()=>$('speechText').value,onText:t=>$('speechText').value=t,onStatus:t=>{$('voiceStatus').textContent=t;$('localListen').disabled=/正在准备|正在本机转/.test(t);},onActive:active=>{$('localListen').disabled=false;$('localListen').textContent=active?'停止并转文字':'◉ 开始录音（本机转文字）';$('speechText').readOnly=active;$('parseVoice').disabled=active;$('listen').disabled=active;$('dictation').disabled=active;}});
+const localCapture=LocalVoice.create({config:window.LOCAL_VOICE_CONFIG,onDiagnostic:event=>{try{localStorage.setItem('sleep-voice-last-session',JSON.stringify(event));}catch{}},getText:()=>$('speechText').value,onText:t=>$('speechText').value=t,onStatus:t=>{$('voiceStatus').textContent=t;$('localListen').disabled=/正在准备|正在本机转/.test(t);},onActive:active=>{$('localListen').disabled=false;$('localListen').textContent=active?'停止并转文字':'◉ 开始录音（本机转文字）';$('speechText').readOnly=active;$('parseVoice').disabled=active;$('listen').disabled=active;$('dictation').disabled=active;}});
 $('localListen').hidden=!window.LOCAL_VOICE_CONFIG;if(window.LOCAL_VOICE_CONFIG){$('dictation').before($('localListen'));$('localListen').style.cssText='display:block;width:100%;margin:12px 0';$('listen').hidden=true;}
 $('localListen').onclick=()=>{if(localCapture.active)localCapture.stop();else localCapture.start();};
 $('voiceOpen').onclick=()=>{$('voiceStatus').textContent='';$('dictationHelp').textContent=dictationHelp();$('dictationGuide').hidden=!!window.LOCAL_VOICE_CONFIG||location.protocol!=='file:';$('dictation').textContent=window.LOCAL_VOICE_CONFIG?'改用系统听写':location.protocol==='file:'?'使用系统听写（推荐）':'使用系统听写';$('listen').textContent='◉ 试用网页语音';if(window.LOCAL_VOICE_CONFIG){$('voiceStatus').textContent='可使用本机转文字。录音不上传云端，讲完后点停止。';$('voicePrivacy').textContent='使用本机转文字时，录音仅在这台电脑上处理，不上传云端。请核对转写文字后再保存。';}$('voiceDialog').showModal();};
 $('listen').onclick=()=>{if(capture.active)capture.stop();else capture.start();};
 $('dictation').onclick=()=>{capture.cancel();$('dictationGuide').hidden=false;$('dictationHelp').textContent=dictationHelp();$('speechText').focus();$('voiceStatus').textContent='输入框已准备好，请使用键盘听写功能开始说话。';};
 $('voiceDialog').addEventListener('close',()=>{capture.cancel();localCapture.cancel();});
-$('parseVoice').onclick=()=>{const text=$('speechText').value.trim();if(!text){$('voiceStatus').textContent='请先说一句或输入描述。';return;}const parsed=S.parseSpeech(text);let r=parsed.record;const old=data.records[parsed.date];if(old){r=S.clone(old);for(const f of ['prepare','onset','final','out'])if(parsed.record[f]){r[f]=parsed.record[f];r.offsets[f]=parsed.record.offsets[f];}for(const f of ['state','feeling','dayFeeling'])if(parsed.record[f])r[f]=parsed.record[f];if(parsed.record.interruptions.length){r.interruptions=parsed.record.interruptions;r.complete=false;}if(r.state==='awake'){r.onset='';r.final='';r.interruptions=[];}r.transcript=text;r.source='口述补充';}
-  $('voiceDialog').close();openEditor(parsed.date,r,['口述只整理为草稿，确认保存后才记入。请核对日期及当日 / 次日。',...parsed.warnings]);};
+function captureVoiceEdits(){if(!voiceDraft)return null;const ctx=voiceDraft,current=readForm();for(const f of ['prepare','onset','final','out','state','feeling','dayFeeling','note','interruptions','complete']){if(JSON.stringify(current[f])!==JSON.stringify(draft[f])||(['prepare','onset','final','out'].includes(f)&&(current[f]||draft[f])&&current.offsets[f]!==draft.offsets[f])){ctx.record[f]=S.clone(current[f]);if(!ctx.providedFields.includes(f))ctx.providedFields.push(f);if(['prepare','onset','final','out'].includes(f))ctx.record.offsets[f]=current.offsets[f];}}return ctx;}
+function openVoiceEditor(ctx,k=ctx.date){
+ const old=data.records[k],record=S.speechDraft(old,ctx.record,ctx.mode||'merge',ctx.providedFields);
+ openEditor(k,record,['识别日期：'+(k||'请手动选择')+'。'+ctx.dateBasis+'。',...ctx.warnings,'尚未保存。请核对本次口述与已有记录后，点击确认并保存。'],ctx);
+ $('voiceTarget').textContent='本次记录：'+(k||'日期待选择')+' 晚';
+ $('voiceExisting').textContent=old?'该晚已有记录；下方可对照旧值、口述值和待保存值。':'该晚还没有记录；未说到的信息留空，不会带入其他日期的数据。';
+ $('voiceMergeMode').value=ctx.mode||'merge';$('voiceMergeMode').disabled=!old;
+ const table=el('table');table.style.cssText='width:100%;font-size:11px;table-layout:fixed;border-collapse:collapse';
+ const head=el('tr');for(const text of ['项目','已有记录','本次口述','待保存'])head.append(el('th','',text));table.append(head);
+ const value=(r,f)=>{if(!r)return '—';if(['prepare','onset','final','out'].includes(f))return r[f]?timeLabel(r[f],r.offsets?.[f]):'未填写';if(f==='state')return stateLabel(r);if(f==='feeling')return feels[r.feeling]||'未填写';if(f==='dayFeeling')return dayFeels[r.dayFeeling]||'未填写';if(r.state==='continuous')return '无明显中断';if(r.state==='awake')return '不适用';return r.interruptions?.map(w=>(w.wake||'时间未知')+'→'+(w.outcome==='reslept'?(w.resleep||'再睡时间未知'):w.outcome==='no_resleep'?'未再睡':'待补充')).join('；')||'未填写';};
+ for(const[f,label]of [['prepare','准备睡'],['onset','入睡'],['final','最后醒'],['out','起床'],['state','情况'],['interruptions','中断'],['feeling','晨起感受'],['dayFeeling','白天困倦']]){const row=el('tr');for(const t of [label,value(old,f),ctx.providedFields.includes(f)?value(ctx.record,f):'未提及',value(record,f)]){const cell=el('td','',t);cell.style.cssText='border-top:1px solid #d9d3e4;padding:7px 2px;overflow-wrap:anywhere;vertical-align:top';row.append(cell);}table.append(row);}
+ $('voiceComparison').replaceChildren(table);
+ $('noteDetails').open=true;
+}
+$('date').addEventListener('change',()=>{if(!voiceDraft)return;const k=$('date').value,ctx=captureVoiceEdits();ctx.date=k;ctx.dateBasis='已手动调整目标夜晚，保留本次口述与手动修正';openVoiceEditor(ctx,k);});
+$('voiceMergeMode').onchange=()=>{const mode=$('voiceMergeMode').value,ctx=captureVoiceEdits();ctx.mode=mode;openVoiceEditor(ctx,$('date').value);};
+$('parseVoice').onclick=()=>{const text=$('speechText').value.trim();if(!text){$('voiceStatus').textContent='请先说一句或输入描述。';return;}const parsed=S.parseSpeech(text);$('voiceDialog').close();openVoiceEditor({...parsed,mode:'merge'});};
 function recordSummary(r){return [stateLabel(r),...events(r).map(e=>e.time+' '+e.label),feels[r.feeling]||'早上感觉未填',r.note].filter(Boolean).join('\n');}
 function openHistory(){renderHistory();$('historyDialog').showModal();}
 function renderHistory(){$('historyStats').textContent=`新版共 ${Object.keys(data.records).length} 晚 · ${data.snapshots.length} 份导入快照 · ${data.conflicts.filter(c=>!c.resolved).length} 份待核对。`;$('conflicts').replaceChildren();for(const c of data.conflicts){const card=el('div','conflict');card.append(el('h3','',c.date+' · '+c.source),el('p','quiet',c.resolved?'已核对，另一份仍随备份保留。':'同一天有两份不同记录。选择后，另一份仍保留在备份里。'),el('strong','','当前新版'),el('pre','',data.records[c.date]?recordSummary(data.records[c.date]):'这一天已删除 / 暂无记录'),el('strong','','导入的历史记录'),el('pre','',recordSummary(c.record)));
@@ -374,7 +440,7 @@ $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;
     if(JSON.stringify(next)!==JSON.stringify(data))commit(next);migrationMessage=`文件已导入 ${result.added} 晚；同日差异 ${result.conflicts} 份，重复 ${result.duplicates+result.skipped} 份。`;render();say(migrationMessage);if(data.conflicts.some(c=>!c.resolved))openHistory();
   }catch(err){say('未导入：'+err.message);}finally{e.target.value='';}};
 window.addEventListener('storage',e=>{if(e.key===S.KEY){try{data=S.load(localStorage);if($('editor').open){$('save').disabled=true;$('formError').textContent='其他页面更新了数据。请保留需要的文字，关闭后重新编辑，避免覆盖。';}render();say('已同步当前浏览器另一页面的更新。');}catch{locked=true;say('记录读取异常，请导出备份。');}}});
-$('editor').addEventListener('close',()=>{$('save').disabled=false;});
+$('editor').addEventListener('close',()=>{$('save').disabled=false;voiceDraft=null;});
 boot();
 
 </script>
